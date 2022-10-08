@@ -8,7 +8,48 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    
+    <div class="main-container">
+        <div class="top-container">
+            <div class="heading-container">
+                <h1>Space Invaders</h1>
+                <h3>Use the arrow keys to move your starship and the spacebar to kill the invaders. May the force be with you</h3>
+            </div>
+            <div class="button-container">
+                <div class="start-button">
+                    <div class="button-icon">
+                        <i class="fa-sharp fa-solid fa-play fa-6x" id="start-btn"></i>
+                    </div>
+                </div>
+                <div class="reload-button">
+                    <div class="button-icon">
+                        <i class="fa-sharp fa-solid fa-rotate-right fa-6x" id="reload-btn"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="game-container">
+            <div class="score-panel">
+                <div class="score-display">
+                    <div class="score-title" id="score-title">SCORE</div>
+                    <div class="score-number" id="score-number">0</div>
+                </div>
+                <div class="score-display">
+                    <div class="score-title" id="lives-title">LIVES</div>
+                    <div class="lives-number" id="lives-number">
+                        <div class="life-symbol" id="life-1"></div>
+                        <div class="life-symbol" id="life-2"></div>
+                        <div class="life-symbol" id="life-3"></div>
+                    </div>
+                </div>
+                <div class="score-display">
+                    <div class="score-title" id="record-title">RECORD</div>
+                    <div class="score-number" id="record-number">0</div>
+                </div>
+            </div>
+            <div class="game-area"></div>
+        </div>
+    </div>
     <script src="./app.js"></script>
+    <script src="https://kit.fontawesome.com/9a6422c61d.js" crossorigin="anonymous"></script>
 </body>
 </html>
