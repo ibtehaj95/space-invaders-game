@@ -6,16 +6,17 @@ const player_obj = {
 };
 
 const bullet_obj = {
-    corr_y: 4,
+    corr_y: 2,
     corr_x: 52,
     visibility: "hidden",
     en_route: 0,
+    bullet_tmr: 0,
     shoot: function(left_x, right_x){
-        console.log(left_x, right_x);
-        this.corr_x = Math.floor((left_x + right_x)/2);
-        console.log(this.corr_y);
-        this.en_route = 1;
-        this.move();
+        if(!this.en_route){
+            this.corr_x = Math.floor((left_x + right_x)/2);
+            this.en_route = 1;
+            bullet_tmr = setInterval(this.move.bind(this), 50); 
+        }
     },
     move: function(){
         this.corr_y = this.corr_y + 2;
@@ -27,12 +28,13 @@ const bullet_obj = {
         {
             this.visibility = "hidden";
             this.corr_x = 0;
-            this.corr_y = 4;
+            this.corr_y = 2;
+            this.en_route = 0;
+            clearInterval(bullet_tmr);
         }
         bullet_elem.style.visibility = this.visibility;
         bullet_elem.style.left = `${this.corr_x}%`;
         bullet_elem.style.bottom = `${this.corr_y}%`;
-        this.en_route = 0;
     }
 };
 
@@ -77,7 +79,7 @@ class Invaders {
         this.element = document.getElementById(`a-${this.number}`);
         this.corr_x_lim_r = this.corr_x + 45;
         this.corr_x_lim_l = this.corr_x - 5;
-        this.corr_y_lim = this.corr_y - 35;
+        this.corr_y_lim = this.corr_y - 30;
     }
 
     move(){
@@ -164,7 +166,6 @@ function player_action(event){
         player_obj.left = player_obj.left + 5;
     }
     else if(key === " "){
-        console.log("Fire in the Hole");
         bullet_obj.shoot(player_obj.left, player_obj.right);
     }
     player_obj.right = player_obj.left + 5;
