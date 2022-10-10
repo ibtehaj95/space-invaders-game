@@ -2,7 +2,38 @@ let invdr_tmr = 0;
 
 const player_obj = {
     left: 50,
-    right: 50
+    right: 55
+};
+
+const bullet_obj = {
+    corr_y: 4,
+    corr_x: 52,
+    visibility: "hidden",
+    en_route: 0,
+    shoot: function(left_x, right_x){
+        console.log(left_x, right_x);
+        this.corr_x = Math.floor((left_x + right_x)/2);
+        console.log(this.corr_y);
+        this.en_route = 1;
+        this.move();
+    },
+    move: function(){
+        this.corr_y = this.corr_y + 2;
+        this.visibility = "visible";
+        this.chk_collision();
+    },
+    chk_collision: function(){
+        if(this.corr_y > 98)
+        {
+            this.visibility = "hidden";
+            this.corr_x = 0;
+            this.corr_y = 4;
+        }
+        bullet_elem.style.visibility = this.visibility;
+        bullet_elem.style.left = `${this.corr_x}%`;
+        bullet_elem.style.bottom = `${this.corr_y}%`;
+        this.en_route = 0;
+    }
 };
 
 const game_area = {
@@ -10,7 +41,7 @@ const game_area = {
     right: 0,
     top: 0,
     bottom: 0
-}
+};
 
 const invaders = {};
 
@@ -55,7 +86,6 @@ class Invaders {
                 this.corr_x = this.corr_x + 5;
             }
             else if(this.moving === "right" && !(this.corr_x < this.corr_x_lim_r)){
-                // this.corr_x = this.corr_x + 5;
                 this.moving = "left";
                 this.go_down = 1;
             }
@@ -63,7 +93,6 @@ class Invaders {
                 this.corr_x = this.corr_x - 5;
             }
             else if(this.moving === "left" && !(this.corr_x > this.corr_x_lim_l)){
-                // this.corr_x = this.corr_x + 5;
                 this.moving = "right";
                 this.go_down = 1;
             }
@@ -87,6 +116,7 @@ const player_elem = document.getElementById("player");
 const game_cont_elem = document.querySelector(".game-area");
 const start_btn = document.getElementById("start-btn");
 const reload_btn = document.getElementById("reload-btn");
+const bullet_elem = document.getElementById("bullet");
 // get_player_corrs();
 // get_game_cont_corrs();
 create_invaders();
@@ -135,7 +165,9 @@ function player_action(event){
     }
     else if(key === " "){
         console.log("Fire in the Hole");
+        bullet_obj.shoot(player_obj.left, player_obj.right);
     }
+    player_obj.right = player_obj.left + 5;
     player_elem.style.left = `${player_obj.left}%`;
 }
 
