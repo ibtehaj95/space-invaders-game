@@ -118,8 +118,8 @@ h3{
     left: 52%;
     bottom:10%;
     background-color: white;
-    width: 0.1rem;
-    height: 0.5rem;
+    width: 0.2%;
+    height: 2%;
     visibility: hidden;
 }
 
@@ -136,7 +136,7 @@ h3{
 .shield{
     position: absolute;
     left: 50%;
-    bottom: 5%;
+    bottom: 7%;
     background-color: #33ff00;
     width: 5%;
     height: 12%;
