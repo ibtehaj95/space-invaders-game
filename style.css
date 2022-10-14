@@ -140,6 +140,10 @@ h3{
     background-color: #33ff00;
     width: 4.5%;
     height: 12%;
+    background-image: url(./assets/shield.png);
+    background-size: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 #shld-0{
@@ -167,7 +171,7 @@ h3{
 
 .alien-type-0{
     background-color: black;
-    background-image: url();
+    background-image: url(./assets/type-0.png);
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -175,7 +179,7 @@ h3{
 
 .alien-type-1{
     background-color: black;
-    background-image: url();
+    background-image: url(./assets/type-1.png);
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -183,7 +187,7 @@ h3{
 
 .alien-type-2{
     background-color: black;
-    background-image: url();
+    background-image: url(./assets/type-2.png);
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -191,7 +195,7 @@ h3{
 
 .alien-type-3{
     background-color: black;
-    background-image: url();
+    background-image: url(./assets/type-3.png);
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -199,7 +203,7 @@ h3{
 
 .alien-type-4{
     background-color: black;
-    background-image: url();
+    background-image: url(./assets/type-4.png);
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;

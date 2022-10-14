@@ -5,6 +5,8 @@ let bomb_0_en_route = 0;
 let bomb_1_en_route = 0;
 let score = 0;
 let lives = 3;
+let record = 0;
+let rcrd_ary = [];
 
 const shield_obj = {
     width: 4.5,
@@ -104,6 +106,7 @@ const bullet_obj = {
                         // console.log("Enemy Killed", i);
                         this.col_det = 1;
                         killed_id = i;
+                        score++;
                     }
 
                     else if(this.corr_x > invaders[i].corr_x && this.corr_x < invaders[i].corr_x+invaders[i].width && this.corr_y > invaders[i].corr_y && this.corr_y+this.height < invaders[i].corr_y+invaders[i].height){
@@ -113,6 +116,7 @@ const bullet_obj = {
                         // console.log("Enemy Killed", i);
                         this.col_det = 1;
                         killed_id = i;
+                        score++;
                     }
 
                     else if(this.corr_x+this.width > invaders[i].corr_x && this.corr_x+this.width < invaders[i].corr_x+invaders[i].width && this.corr_y > invaders[i].corr_y && this.corr_y+this.height < invaders[i].corr_y+invaders[i].height){
@@ -122,10 +126,11 @@ const bullet_obj = {
                         // console.log("Enemy Killed", i);
                         this.col_det = 1;
                         killed_id = i;
+                        score++;
                     }
-
                 }
             }
+            score_elem.textContent = score;
         }
 
         if(this.col_det)
@@ -185,7 +190,7 @@ const bullet_obj = {
                     }
                     else{
                         all_invdrs_dead = 1;
-                        console.log("Game Over. You Win. You defeated the Enemy");
+                        // console.log("Game Over. You Win. You defeated the Enemy");
                         end_game();
                     }
                    }
@@ -225,7 +230,7 @@ const bullet_obj = {
 
                     else{
                         all_invdrs_dead = 1;
-                        console.log("Game Over. You Win. You defeated the Enemy");
+                        // console.log("Game Over. You Win. You defeated the Enemy");
                         end_game();
                     }
                     
@@ -234,7 +239,7 @@ const bullet_obj = {
             }
 
             if(shield_hit){
-                console.log("Shield Hit!");
+                // console.log("Shield Hit!");
                 const shield_elem = document.getElementById(`shld-${shield_id}`);
                 shield_elem.style.visibility = "collapse";
                 if (shield_stat.reduce(function(pv, cv){
@@ -338,7 +343,7 @@ class Invaders {
         this.element.style.left = `${this.corr_x}%`;
         this.element.style.bottom = `${this.corr_y}%`;
         if(this.breached){
-            console.log("Game Over. You Lose. Defenses Compromised");
+            // console.log("Game Over. You Lose. Defenses Compromised");
             end_game();
         }
     }
@@ -431,7 +436,7 @@ class Bomb {
             }
 
             if(shield_hit){
-                console.log("Shield Hit!");
+                // console.log("Shield Hit!");
                 const shield_elem = document.getElementById(`shld-${shield_id}`);
                 shield_elem.style.visibility = "collapse";
                 if (shield_stat.reduce(function(pv, cv){
@@ -477,10 +482,13 @@ const game_cont_elem = document.querySelector(".game-area");
 const start_btn = document.getElementById("start-btn");
 const reload_btn = document.getElementById("reload-btn");
 const bullet_elem = document.getElementById("bullet");
+const score_elem = document.getElementById("score-number");
+const record_elem = document.getElementById("record-number");
 create_invaders();
 start_btn.addEventListener("click", start_game);
 reload_btn.addEventListener("click", reload_page);
 player_obj.calcs();
+get_record();
 
 function start_game(){
     document.addEventListener("keydown", player_action);
@@ -495,6 +503,9 @@ function reload_page(){
 function end_game(){
     clearInterval(invdr_tmr);
     document.removeEventListener("keydown", player_action);
+    if(score > record){
+        set_record();
+    }
 }
 
 function drop_bombs(){
@@ -551,7 +562,30 @@ function game_reset(){
     life_element.style.visibility = "hidden";
     lives--;
     if(lives === 0){
-        console.log("Game Over. You Lose. The Enemy destroyed your Laser");
+        // console.log("Game Over. You Lose. The Enemy destroyed your Laser");
         end_game();
     }
+}
+
+function get_record(){
+    if(localStorage.getItem("si")){
+        rcrd_ary = JSON.parse(localStorage.getItem("si"));
+        if(rcrd_ary[0] === "record"){
+            record = parseInt(rcrd_ary[1]);
+            record_elem.textContent = record;
+        }
+        else{
+            record = 0;
+        }
+    }
+    else{
+        rcrd_ary = ["record", 0];
+    }
+}
+
+function set_record(){
+    rcrd_ary[1] = score;
+    // console.log(rcrd_ary);
+    localStorage.setItem("si", JSON.stringify(rcrd_ary));
+    get_record();
 }
