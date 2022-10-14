@@ -6,11 +6,32 @@ let bomb_1_en_route = 0;
 let score = 0;
 let lives = 3;
 
+const shield_obj = {
+    width: 4.5,
+    height: 12
+};
+
 const player_obj = {
-    left: 50,
-    right: 55,
+    width: 2,
+    left: 0,
+    right: 0,
     top: 3,
-    bottom: 0
+    bottom: 0,
+    step_size: 0,
+    calcs: function(){
+        this.left_calc();
+        this.rght_calc();
+        this.ss_calc();
+    },
+    left_calc: function(){
+        this.left = this.width*25;
+    },
+    rght_calc: function(){
+        this.right = this.left+this.width;
+    },
+    ss_calc: function(){
+        this.step_size = this.width;
+    }
 };
 
 const shield_stat = [1, 1, 1, 1];
@@ -18,7 +39,7 @@ const shield_stat = [1, 1, 1, 1];
 const bullet_obj = {
     corr_y: 2,
     corr_x: 52,
-    width: 0.2,
+    width: 0.1,
     height: 2,
     visibility: "hidden",
     en_route: 0,
@@ -47,25 +68,25 @@ const bullet_obj = {
         }
 
         else if(this.corr_y > 5 && this.corr_y < 20 && all_shields_intact){
-            if(this.corr_x >= 16 && this.corr_x < 21 && shield_stat[0]){
+            if(this.corr_x >= 16 && this.corr_x < 16+shield_obj.width && shield_stat[0]){
                 this.col_det = 1;
                 shield_hit = 1;
                 shield_stat[0] = 0;
                 shield_id = 0;
             }
-            else if(this.corr_x >= 37 && this.corr_x < 42 && shield_stat[1]){
+            else if(this.corr_x >= 37 && this.corr_x < 37+shield_obj.width && shield_stat[1]){
                 this.col_det = 1;
                 shield_hit = 1;
                 shield_stat[1] = 0;
                 shield_id = 1;
             }
-            else if(this.corr_x >= 58 && this.corr_x < 63 && shield_stat[2]){
+            else if(this.corr_x >= 58 && this.corr_x < 58+shield_obj.width && shield_stat[2]){
                 this.col_det = 1;
                 shield_hit = 1;
                 shield_stat[2] = 0;
                 shield_id = 2;
             }
-            else if(this.corr_x >= 79 && this.corr_x < 84 && shield_stat[3]){
+            else if(this.corr_x >= 79 && this.corr_x < 79+shield_obj.width && shield_stat[3]){
                 this.col_det = 1;
                 shield_hit = 1;
                 shield_stat[3] = 0;
@@ -77,6 +98,24 @@ const bullet_obj = {
             for(let i=0; i<50; ++i){
                 if(!invaders[i].dead){
                     if(this.corr_x > invaders[i].corr_x && this.corr_x+this.width < invaders[i].corr_x+invaders[i].width && this.corr_y > invaders[i].corr_y && this.corr_y+this.height < invaders[i].corr_y+invaders[i].height){
+                        invaders[i].dead = 1;
+                        inv_elem = document.getElementById(`a-${invaders[i].number}`);
+                        inv_elem.style.visibility = "hidden";
+                        // console.log("Enemy Killed", i);
+                        this.col_det = 1;
+                        killed_id = i;
+                    }
+
+                    else if(this.corr_x > invaders[i].corr_x && this.corr_x < invaders[i].corr_x+invaders[i].width && this.corr_y > invaders[i].corr_y && this.corr_y+this.height < invaders[i].corr_y+invaders[i].height){
+                        invaders[i].dead = 1;
+                        inv_elem = document.getElementById(`a-${invaders[i].number}`);
+                        inv_elem.style.visibility = "hidden";
+                        // console.log("Enemy Killed", i);
+                        this.col_det = 1;
+                        killed_id = i;
+                    }
+
+                    else if(this.corr_x+this.width > invaders[i].corr_x && this.corr_x+this.width < invaders[i].corr_x+invaders[i].width && this.corr_y > invaders[i].corr_y && this.corr_y+this.height < invaders[i].corr_y+invaders[i].height){
                         invaders[i].dead = 1;
                         inv_elem = document.getElementById(`a-${invaders[i].number}`);
                         inv_elem.style.visibility = "hidden";
@@ -140,7 +179,7 @@ const bullet_obj = {
                             invader.left_most = 1;
                         });
                         invaders.forEach(function(invader){
-                            invader.corr_x_lim_l = invader.corr_x_lim_l-5*loop_passes;
+                            invader.corr_x_lim_l = invader.corr_x_lim_l-invader.width*loop_passes*2;    //invader_width = 2, gap_bw_invdrs = 2
                             // console.log(invader.number ,invader.corr_x_lim_l, invader.dead);
                         });
                     }
@@ -180,7 +219,7 @@ const bullet_obj = {
                             invader.right_most = 1;
                         });
                         invaders.forEach(function(invader){
-                            invader.corr_x_lim_r = invader.corr_x_lim_r+5*loop_passes;
+                            invader.corr_x_lim_r = invader.corr_x_lim_r+invader.width*loop_passes*2;
                         });
                     }
 
@@ -226,7 +265,7 @@ class Invaders {
     type = "";
     number = 0;
     corr_x = 0;
-    width = 2.5;
+    width = 2;
     corr_x_lim_r = 0;
     corr_x_lim_l = 0;
     corr_y = 0;
@@ -264,22 +303,22 @@ class Invaders {
         inv_div.style.bottom = `${this.corr_y}%`;
         game_cont_elem.appendChild(inv_div);
         this.element = document.getElementById(`a-${this.number}`);
-        this.corr_x_lim_r = this.corr_x + 45;
-        this.corr_x_lim_l = this.corr_x - 0;
+        this.corr_x_lim_r = this.corr_x + this.width*29;    //2*29 = 58
+        this.corr_x_lim_l = this.corr_x - this.width*2;     //4
         this.corr_y_lim = this.corr_y - 70 + Math.floor(this.number/10)*10;
     }
 
     move(){
         if(!this.go_down){
             if(this.moving === "right" && this.corr_x < this.corr_x_lim_r){
-                this.corr_x = this.corr_x + 5;
+                this.corr_x = this.corr_x + 1;
             }
             else if(this.moving === "right" && !(this.corr_x < this.corr_x_lim_r)){
                 this.moving = "left";
                 this.go_down = 1;
             }
             else if(this.moving === "left" && this.corr_x > this.corr_x_lim_l){
-                this.corr_x = this.corr_x - 5;
+                this.corr_x = this.corr_x - 1;
             }
             else if(this.moving === "left" && !(this.corr_x > this.corr_x_lim_l)){
                 this.moving = "right";
@@ -308,8 +347,8 @@ class Invaders {
 class Bomb {
     corr_x = 0;
     corr_y = 0;
-    width = 3;
-    height = 0.5;
+    width = 0.4;
+    height = 3;
     en_route = 0;
     col_det = 0;
     bomb_tmr = 0;
@@ -343,25 +382,25 @@ class Bomb {
         }
 
         else if(this.corr_y > 5 && this.corr_y < 20 && all_shields_intact){
-            if(this.corr_x >= 16 && this.corr_x < 21 && shield_stat[0]){
+            if(this.corr_x >= 16 && this.corr_x < 16+shield_obj.width && shield_stat[0]){
                 this.col_det = 1;
                 shield_hit = 1;
                 shield_stat[0] = 0;
                 shield_id = 0;
             }
-            else if(this.corr_x >= 37 && this.corr_x < 42 && shield_stat[1]){
+            else if(this.corr_x >= 37 && this.corr_x < 37+shield_obj.width && shield_stat[1]){
                 this.col_det = 1;
                 shield_hit = 1;
                 shield_stat[1] = 0;
                 shield_id = 1;
             }
-            else if(this.corr_x >= 58 && this.corr_x < 63 && shield_stat[2]){
+            else if(this.corr_x >= 58 && this.corr_x < 58+shield_obj.width && shield_stat[2]){
                 this.col_det = 1;
                 shield_hit = 1;
                 shield_stat[2] = 0;
                 shield_id = 2;
             }
-            else if(this.corr_x >= 79 && this.corr_x < 84 && shield_stat[3]){
+            else if(this.corr_x >= 79 && this.corr_x < 79+shield_obj.width && shield_stat[3]){
                 this.col_det = 1;
                 shield_hit = 1;
                 shield_stat[3] = 0;
@@ -441,10 +480,11 @@ const bullet_elem = document.getElementById("bullet");
 create_invaders();
 start_btn.addEventListener("click", start_game);
 reload_btn.addEventListener("click", reload_page);
+player_obj.calcs();
 
 function start_game(){
     document.addEventListener("keydown", player_action);
-    invdr_tmr = setInterval(move_invaders, 1000);    //1500
+    invdr_tmr = setInterval(move_invaders, 500);    //1500
     start_btn.removeEventListener("click", start_game);
 }
 
@@ -480,7 +520,7 @@ function create_invaders(){
     let bottom = 80;
     for(let i=0; i<5; ++i){
         for(let j=0; j<10; ++j){
-            invaders[alien_num] = new Invaders(i, alien_num, 5*j+5, bottom-i*10); //typ, num, loc_x, loc_y, name
+            invaders[alien_num] = new Invaders(i, alien_num, 4*j+4, bottom-i*10); //typ, num, loc_x, loc_y, name
             alien_num++;
         }
     }
@@ -488,22 +528,22 @@ function create_invaders(){
 
 function player_action(event){
     const key = event.key;
-    if(key === "ArrowLeft" && player_obj.left >= 5){
-        player_obj.left = player_obj.left - 5;
+    if(key === "ArrowLeft" && player_obj.left >= player_obj.step_size){
+        player_obj.left = player_obj.left - player_obj.step_size;
     }
-    else if(key === "ArrowRight" && player_obj.left <= 90){
-        player_obj.left = player_obj.left + 5;
+    else if(key === "ArrowRight" && player_obj.left <= 100-(player_obj.step_size*2)){
+        player_obj.left = player_obj.left + player_obj.step_size;
     }
     else if(key === " "){
         bullet_obj.shoot(player_obj.left, player_obj.right);
     }
-    player_obj.right = player_obj.left + 5;
+    player_obj.right = player_obj.left + player_obj.width;
     player_elem.style.left = `${player_obj.left}%`;
 }
 
 function game_reset(){
     player_obj.left = 50;
-    player_obj.right = player_obj.left + 5;
+    player_obj.right = player_obj.left + player_obj.width;
     player_elem.style.left = `${player_obj.left}%`;
     bomb_0.col_det = 1;
     bomb_1.col_det = 1;

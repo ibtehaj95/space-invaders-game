@@ -109,7 +109,7 @@ h3{
     left: 50%;
     bottom: 0%;
     background-color: white;
-    width: 5%;
+    width: 2%;
     height: 3%;
 }
 
@@ -118,7 +118,7 @@ h3{
     left: 52%;
     bottom:10%;
     background-color: white;
-    width: 0.2%;
+    width: 0.1%;
     height: 2%;
     visibility: hidden;
 }
@@ -128,7 +128,7 @@ h3{
     left: 52%;
     bottom:20%;
     background-color: white;
-    width: 0.5%;
+    width: 0.4%;
     height: 3%;
     visibility: hidden;
 }
@@ -138,7 +138,7 @@ h3{
     left: 50%;
     bottom: 7%;
     background-color: #33ff00;
-    width: 5%;
+    width: 4.5%;
     height: 12%;
 }
 
@@ -159,8 +159,48 @@ h3{
 }
 
 .alien{
-    width: 2.5%;
+    width: 2%;
     height: 6%;
     background-color: white;
     position: absolute;
+}
+
+.alien-type-0{
+    background-color: black;
+    background-image: url();
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.alien-type-1{
+    background-color: black;
+    background-image: url();
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.alien-type-2{
+    background-color: black;
+    background-image: url();
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.alien-type-3{
+    background-color: black;
+    background-image: url();
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.alien-type-4{
+    background-color: black;
+    background-image: url();
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
